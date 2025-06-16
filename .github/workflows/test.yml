@@ -1,0 +1,27 @@
+name: commit-test
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  tests:
+    # always specify the image version
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # A GitHub Action that implements smart caching for rust/cargo projects with sensible defaults
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Rust tools
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Lint
+        run: make lint
+
+      - name: Test
+        run: make test
