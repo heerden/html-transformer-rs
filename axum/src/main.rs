@@ -3,8 +3,6 @@ use axum::serve;
 use tokio::net::TcpListener;
 
 mod api;
-mod models;
-mod services;
 
 #[tokio::main]
 async fn main() {

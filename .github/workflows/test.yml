@@ -23,5 +23,5 @@ jobs:
       - name: Lint
         run: make lint
 
-      - name: Test
+      - name: Test Transformer Library
         run: make test

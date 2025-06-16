@@ -33,9 +33,9 @@ mod test_transform {
     use super::*;
     use serial_test::serial;
 
-    #[tokio::test]
+    #[test]
     #[serial]
-    async fn test_transform_case() {
+    fn test_transform_case() {
         // Special note, I write out the params as separate variables for readability
 
         // Test 1 Simple lower case

@@ -1,0 +1,8 @@
+[package]
+name = "html-transformer-actix"
+edition = "2024"
+resolver = "3"
+
+[dependencies]
+actix-web = {version = "4.11.0"}
+transformer = { path = "../transformer"}

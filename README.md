@@ -4,35 +4,39 @@
 
 A Rust library that converts the text inside HTML <p> elements to upper or lower case.
 
-A light Axum web server is used to exposes a transform API endpoint.
+Axum web server is the primary web server to exposes a Transform API endpoint.
 
-The transformer library is dependent on `kuchikiki` (Brave)
+This transformer library is dependent on `kuchikiki` (Brave)
 which is further build on top of `html5ever` (Mozilla).
 
-Fully test coverage is provided for the Transform Service.
+100% test coverage is provided for the `transformer` crate.
+
+An additional comparative study is done to compare the response times of an Axum vs an Actix server, 
+serving the same transform method.
 
 # Getting started
 
 Package was developed on macOS and tested on Ubuntu. 
 Rust version `1.85.0` was used.
 
-Prerequisites:
-```shell
-cargo install cargo-tarpaulin
-cargo install cargo-sort
-```
+## Prerequisites
+* `cargo install cargo-tarpaulin`
+* `cargo install cargo-sort`
+
+## Commands
 
 Use the following make commands to get started:
 
-| Command         | Description                                                    |
-|-----------------|----------------------------------------------------------------|
-| `make test`     | Perform unit test                                              |
-| `make coverage` | Generates a test coverage report                               |
-| `make build`    | Builds a production ready package, ready to be served          |
-| `make pretty`   | Automatically formats your code to Rust standards              |
-| `make lint`     | Lint checks your code                                          |
-| `make check`    | Perform a combined Pretty and Lint test before you commit code |
-| `make serve`    | Serve the package server from the build production release     |
+| Command            | Description                                                    |
+|--------------------|----------------------------------------------------------------|
+| `make test-axum`   | Perform unit test                                              |
+| `make coverage`    | Generates a test coverage report                               |
+| `make build-axum`  | Builds a production ready package, ready to be served          |
+| `make load-axum`   | Runs a load test on the production release                     |
+| `make pretty-axum` | Automatically formats your code to Rust standards              |
+| `make lint-axum`   | Lint checks your code                                          |
+| `make check-axum`  | Perform a combined Pretty and Lint test before you commit code |
+| `make serve-axum`  | Serve the package server from the build production release     |    
 
 # Usage
 
@@ -40,7 +44,7 @@ Quick steps to usage the package:
 ```shell
 make build
 chmod +x ./target/release/html-transformer
-make serve
+make serve-axum
 ```
 
 Example request:
@@ -82,17 +86,35 @@ With example response:
 <div><p>first paragraph element</p><span>Not a paragraph</span><p>this is the <strong>second</strong> listed <em>paragraph</em> element</p></div>
 ```
 
-# Bonus tasks
-- [ ] Perform load test with Grafana k6
-- [ ] Compare result with an Actix implementation
-- [ ] Integration test for the web servers
+# Load Test
+
+## Prerequisites
+* [Grafana k6](https://grafana.com/docs/k6/latest/set-up/install-k6/) Load Testing Tool
+
+Ensure that both the Axum and Actix are build and running. Then execute:
+
+* `make load-axum`
+* `make load-actix`
+
+## Results and Discussion
+
+| Server | Avg (µs) | Min (µs) | Med (µs) | Max (µs) | p(90) (µs) | p(95) (µs) |
+|--------|----------|----------|----------|----------|------------|------------|
+| Axum   | 116.62   | 89       | 106      | 6.84     | 124        | 138        |
+| Actix  | 101.61   | 77       | 92       | 2.84     | 114        | 136.04     |
+
+Comparative studies and Stack Overflow comments will always claim that either Axum or Actix is the faster web server.
+While Actix win our load test race, on all metrics, it was only by a few micro seconds each time.
+
+Ergonomics and integration with other Rust system should be the main decider when selecting which server to choose.
+
+# Future Improvements
+
+- [ ] Integration test for the web server end-points
 - [ ] Ensure fully test coverage of all sub-systems
 - [ ] More robust error handling responses
 - [ ] Extend for full html document return, if required, currently it only returns body fragments
-
-# Future Recommendation
-
-- Extend the api to transform the text case any specific html tag
-- Extend the api to transform with more case types, e.g. sentence case
-- `syn-rs` can be explored as an alternative to `kuchikiki`:
+- [ ] Extend the api to transform the text case any specific html tag
+- [ ] Extend the api to transform with more case types, e.g. sentence case
+- [ ] Explore `syn-rs` as an alternative to `kuchikiki`:
 https://github.com/stoically/syn-rsx

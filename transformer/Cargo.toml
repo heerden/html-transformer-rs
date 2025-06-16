@@ -1,0 +1,10 @@
+[package]
+name = "transformer"
+edition = "2024"
+
+[dependencies]
+kuchikiki = { version = "0.8.2" }
+serde = { version = "1.0.219", features = ["derive"] }
+
+[dev-dependencies]
+serial_test = { version = "3.2" }

@@ -1,18 +1,13 @@
-[package]
-name = "html-transformer"
-version = "0.1.0"
-edition = "2024"
+[workspace]
+members = [
+    "actix",
+    "axum",
+    "transformer"
+]
 resolver = "3"
 
-[dependencies]
-axum = { version = "0.8.4" }
-kuchikiki = { version = "0.8.2" }
-serde = { version = "1.0.219", features = ["derive"] }
-tokio = { version = "1.45.1", features = ["macros", "rt-multi-thread", "rt"] }
-tower-http = { version = "0.6.6", features = ["compression-full", "cors"] }
-
-[dev-dependencies]
-serial_test = { version = "3.2" }
+[workspace.package]
+version = "0.1.1"
 
 [profile.release]
 lto = true
